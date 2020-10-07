@@ -1,4 +1,4 @@
-# package
+# Package
 import tensorflow as tf
 from tensorflow.keras.layers import Conv2D, BatchNormalization, Activation, MaxPooling2D, Dropout, Flatten, Dense
 from tensorflow.keras import Model
@@ -7,12 +7,12 @@ import numpy as np
 from matplotlib import pyplot as plt
 np.set_printoptions(threshold=np.inf)
 
-# dataset
+# Dataset
 cifar10 = tf.keras.datasets.cifar10
 (x_train, y_train), (x_test, y_test) = cifar10.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
 
-# ai
+# AI
 class Baseline(Model):
     def __init__(self):
         super(Baseline, self).__init__()
@@ -40,14 +40,14 @@ class Baseline(Model):
         return y
 model = Baseline()
 
-# compile
+# Compile
 model.compile(
     optimizer='adam',
     loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=False),
     metrics=['sparse_categorical_accuracy'],
 )
 
-# checkpoint
+# Checkpoint
 checkpoint_save_path = "./checkpoint/Baseline.ckpt"
 if os.path.exists(checkpoint_save_path + '.index'):
     print('-------------load the model-----------------')
@@ -57,7 +57,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(
     save_weights_only=True,
     save_best_only=True)
 
-# fit
+# Fit
 history = model.fit(
     x_train, y_train,
     batch_size=32,
@@ -67,7 +67,7 @@ history = model.fit(
     callbacks=[cp_callback])
 model.summary()
 
-# print weights
+# Print weights
 file = open('./weights.txt', 'w')
 for v in model.trainable_variables:
     file.write(str(v.name) + '\n')
@@ -75,7 +75,7 @@ for v in model.trainable_variables:
     file.write(str(v.numpy()) + '\n')
 file.close()
 
-# show
+# Show
 acc = history.history['sparse_categorical_accuracy']
 val_acc = history.history['val_sparse_categorical_accuracy']
 loss = history.history['loss']
